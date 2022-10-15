@@ -15,7 +15,10 @@
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.use_sql_comments" value="true"/>
-            <!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+            <property name="hibernate.jdbc.batch_size" value="10"/>
+<!--           batch_size 버퍼링, 모았다가 한번에 디비에-->
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+<!--            운영서버엔 validate,none만, 로컬에서만 써, 개발운영엔 쓰지마-->
         </properties>
     </persistence-unit>
 </persistence>
