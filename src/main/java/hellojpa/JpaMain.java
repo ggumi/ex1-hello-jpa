@@ -64,7 +64,10 @@ public class JpaMain {
 //            System.out.println("===AFTER===");
 
             Member member = new Member();
-            member.
+            member.setId(3L);
+            member.setUsername("A");
+            member.setRoleType(RoleType.ADMIN);
+            em.persist(member);
 
 
             tx.commit(); // 꼭, 이때 디비에 쿼리 날라감, 이때 플러쉬
