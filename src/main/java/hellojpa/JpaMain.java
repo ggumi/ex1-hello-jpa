@@ -63,11 +63,14 @@ public class JpaMain {
 //            em.detach(member); // 준영속 상태
 //            System.out.println("===AFTER===");
 
-            Member member = new Member();
-            member.setId(3L);
-            member.setUsername("A");
-            member.setRoleType(RoleType.ADMIN);
-            em.persist(member);
+                Member member = new Member();
+                member.setUsername("member1");
+                em.persist(member);
+
+                Team team = new Team();
+                team.setName("teamA");
+                team.getMembers().add(member);
+                em.persist(team);
 
 
             tx.commit(); // 꼭, 이때 디비에 쿼리 날라감, 이때 플러쉬
