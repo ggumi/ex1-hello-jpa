@@ -22,21 +22,28 @@ public class JpaMain {
         tx.begin();
 
         try {
+            Team team1=new Team();
+            team1.setName("team1");
+            em.persist(team1);
+
+            Team team2=new Team();
+            team2.setName("team2");
+            em.persist(team2);
+
             Member member1 = new Member();
             member1.setUsername("ggumi");
+            member1.setTeam(team1);
             em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("yangYang");
+            member2.setTeam(team2);
+            em.persist(member2);
 
             em.flush();
             em.clear();
 
-            Member referenceMember = em.getReference(Member.class, member1.getId());
-            System.out.println("referenceMember.getClass() = " + referenceMember.getClass());
-//            referenceMember.getUsername();// 강제초기화
-            System.out.println(emf.getPersistenceUnitUtil().isLoaded(referenceMember));
-            Hibernate.initialize(referenceMember);
-            System.out.println(emf.getPersistenceUnitUtil().isLoaded(referenceMember));
-
-
+            List<Member> result = em.createQuery("select m from Member m").getResultList();
 
             tx.commit(); // 이때 디비에 쿼리 날라감, 이때 플러쉬
         } catch (Exception e) {

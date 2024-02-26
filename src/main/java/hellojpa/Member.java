@@ -15,7 +15,19 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    // 지연로딩 LAZY 사용해서 프록시로 조됨
+    // EAGER - member,team 조인
+    @JoinColumn
+    private Team team;
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public Long getId() {
         return id;
