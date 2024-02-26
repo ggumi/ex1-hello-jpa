@@ -1,5 +1,6 @@
 package hellojpa;
 
+import hellojpa.jpashop.Book;
 import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
@@ -22,22 +23,11 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Child child1 = new Child();
-            Child child2 = new Child();
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("김영한");
 
-            Parent parent = new Parent();
-            parent.addChild(child1);
-            parent.addChild(child2);
-
-            em.persist(parent);
-
-            em.flush();
-            em.clear();
-
-            Parent findParent = em.find(Parent.class, parent.getId());
-            findParent.getChildList().remove(0);
-
-
+            em.persist(book);
 
             tx.commit(); // 이때 디비에 쿼리 날라감, 이때 플러쉬
         } catch (Exception e) {
