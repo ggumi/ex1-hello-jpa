@@ -22,31 +22,26 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Team team1=new Team();
-            team1.setName("team1");
-            em.persist(team1);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Team team2=new Team();
-            team2.setName("team2");
-            em.persist(team2);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
 
-            Member member1 = new Member();
-            member1.setUsername("ggumi");
-            member1.setTeam(team1);
-            em.persist(member1);
-
-            Member member2 = new Member();
-            member2.setUsername("yangYang");
-            member2.setTeam(team2);
-            em.persist(member2);
+            em.persist(parent);
 
             em.flush();
             em.clear();
 
-            List<Member> result = em.createQuery("select m from Member m").getResultList();
+            Parent findParent = em.find(Parent.class, parent.getId());
+            findParent.getChildList().remove(0);
+
+
 
             tx.commit(); // 이때 디비에 쿼리 날라감, 이때 플러쉬
         } catch (Exception e) {
+            e.printStackTrace();
             tx.rollback();
         }finally {
             em.close();
@@ -55,9 +50,4 @@ public class JpaMain {
         emf.close(); // WAS 내려갈 때 닫아줘야, 커넥션 풀링이나 리소스 릴리즈 됨
     }
 
-    private static void logic(Member m1, Member m2) {
-        System.out.println("m1 = " + (m1 instanceof Member));
-        System.out.println("m2 = " + (m2 instanceof Member));
-        System.out.println("m2 = " + (m1 == m2));
-    }
 }
