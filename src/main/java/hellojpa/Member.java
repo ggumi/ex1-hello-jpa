@@ -15,19 +15,24 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    // 지연로딩 LAZY 사용해서 프록시로 조됨
-    // EAGER - member,team 조인
-    @JoinColumn
-    private Team team;
+    @Embedded
+    private Period workPeriod;
 
-    public Team getTeam() {
-        return team;
-    }
+    @Embedded
+    private Address homeAddress;
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+    @AttributeOverrides({
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "work_city")),
+            @AttributeOverride(name = "street",
+                    column = @Column(name = "work_street")),
+            @AttributeOverride(name = "city",
+                    column = @Column(name = "work_zipcode"))
+    })
+    private Address address;
+
+
+    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -43,5 +48,21 @@ public class Member {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Period getWorkPeriod() {
+        return workPeriod;
+    }
+
+    public void setWorkPeriod(Period workPeriod) {
+        this.workPeriod = workPeriod;
+    }
+
+    public Address getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 }

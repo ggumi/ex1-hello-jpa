@@ -23,11 +23,11 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Book book = new Book();
-            book.setName("JPA");
-            book.setAuthor("김영한");
-
-            em.persist(book);
+            Member member = new Member();
+            member.setUsername("gumi");
+            member.setWorkPeriod(new Period());
+            member.setHomeAddress(new Address("서울","강남구","33333"));
+            em.persist(member);
 
             tx.commit(); // 이때 디비에 쿼리 날라감, 이때 플러쉬
         } catch (Exception e) {
