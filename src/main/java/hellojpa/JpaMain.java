@@ -1,12 +1,16 @@
 package hellojpa;
 
 import hellojpa.jpashop.Book;
+import hellojpa.jpashop.Member;
 import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,11 +27,12 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("gumi");
-            member.setWorkPeriod(new Period());
-            member.setHomeAddress(new Address("서울","강남구","33333"));
-            em.persist(member);
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+            Root<Member> m = query.from(Member.class);
+
+            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
+            List<Member> resultList = em.createQuery(cq).getResultList();
 
             tx.commit(); // 이때 디비에 쿼리 날라감, 이때 플러쉬
         } catch (Exception e) {
