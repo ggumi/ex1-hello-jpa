@@ -3,7 +3,7 @@ package hellojpa;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
 
 @Entity // jpa가 관리, db테이블과 매핑
 public class Member {
@@ -21,18 +21,33 @@ public class Member {
     @Embedded
     private Address homeAddress;
 
-    @AttributeOverrides({
-            @AttributeOverride(name = "city",
-                    column = @Column(name = "work_city")),
-            @AttributeOverride(name = "street",
-                    column = @Column(name = "work_street")),
-            @AttributeOverride(name = "city",
-                    column = @Column(name = "work_zipcode"))
-    })
-    private Address address;
+    @ElementCollection
+    @CollectionTable(name = "FAVORITE_FOOD", joinColumns =
+        @JoinColumn(name = "MEMBER_ID")
+    )
+    @Column(name = "FOOD_NAME")
+    private Set<String> favoriteFoods = new HashSet<>();
 
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns =
+//        @JoinColumn(name = "MEMBER_ID")
+//    )
+//    private List<Address> addressHistory = new ArrayList<>();
 
-    private Address workAddress;
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "MEMBER_ID")
+    private List<AddressEntity> addressHistory = new ArrayList<>();
+
+//    @AttributeOverrides({
+//            @AttributeOverride(name = "city",
+//                    column = @Column(name = "work_city")),
+//            @AttributeOverride(name = "street",
+//                    column = @Column(name = "work_street")),
+//            @AttributeOverride(name = "zipcode",
+//                    column = @Column(name = "work_zipcode"))
+//    })
+//    @Embedded
+//    private Address workAddress;
 
     public Long getId() {
         return id;
@@ -64,5 +79,22 @@ public class Member {
 
     public void setHomeAddress(Address homeAddress) {
         this.homeAddress = homeAddress;
+    }
+
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+
+    }
+
+    public List<AddressEntity> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
+        this.addressHistory = addressHistory;
     }
 }
